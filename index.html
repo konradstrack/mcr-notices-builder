@@ -7,6 +7,13 @@
 	<link rel='stylesheet' href='assets/css/application.css' type='text/css' />
 	<script>
 		window.onload = function() {
+			document.getElementById('addNotice').onclick = addNotice;
+			document.getElementById('cleanUp').onclick = function() {
+				cleanUp();
+				generate();
+			}
+			document.getElementById('generate').onclick = generate;
+
 			generate();
 		}
 	</script>
@@ -25,9 +32,9 @@
 			</article>
 		</div>
 
-		<button name="addNotice" onclick="addNotice()">Add notice</button>
-		<button name="clean-up" onclick="cleanUp(); generate()">Clean up formatting</button>
-		<button name="generate" onclick="generate()">Generate</button>
+		<button name="addNotice" id="addNotice">Add notice</button>
+		<button name="cleanUp" id="cleanUp">Clean up formatting</button>
+		<button name="generate" id="generate">Generate</button>
 	</div>
 
 	<div id="right">

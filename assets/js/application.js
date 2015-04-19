@@ -25,6 +25,7 @@ function fixNodeStyle(node) {
     if (classes.indexOf(node.nodeName.toLowerCase()) > -1) {
         node.style.fontSize = '';
         node.style.fontFamily = '';
+		node.style.lineHeight = '';
     }
     
     if (node.nodeName.toLowerCase() == 'p') {
