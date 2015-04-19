@@ -38,6 +38,7 @@ function addNotice() {
     var notice = document.createElement("article");
     notice.contentEditable = "true";
     notice.className = "notice";
+	notice.onkeyup = generate;
     
     notices.appendChild(notice);
 }
@@ -50,6 +51,7 @@ function generate() {
     previewElement.innerHTML = '';
     
     var table = document.createElement("table");
+	table.style.width = '100%';
     previewElement.appendChild(table);
     
     var index = 1;
@@ -63,6 +65,7 @@ function generate() {
         tdIndex.style.fontSize = '20pt';
         tdIndex.style.color = '#444444';
         tdIndex.style.fontWeight = 'bold';
+		tdIndex.style.width = '40pt';
         
         tdIndex.textContent = index;
         ++index;
