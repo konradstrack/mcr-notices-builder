@@ -5,6 +5,14 @@
 	<title>MCR notices builder</title>
 	<script src='assets/js/application.js'></script>
 	<link rel='stylesheet' href='assets/css/application.css' type='text/css' />
+	<script>
+		window.onload = function() {
+			generate();
+		}
+	</script>
+
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -12,11 +20,13 @@
 	<div id="left">
 		<h2>Notices</h2>
 		<div id="notices">
-			<article contenteditable="true" class="notice" onkeyup="generate()"></article>
+			<article contenteditable="true" class="notice" onkeyup="generate()">
+				Add your notices here.
+			</article>
 		</div>
 
-		<button name="clean-up" onclick="cleanUp()">Clean up</button>
 		<button name="addNotice" onclick="addNotice()">Add notice</button>
+		<button name="clean-up" onclick="cleanUp(); generate()">Clean up formatting</button>
 		<button name="generate" onclick="generate()">Generate</button>
 	</div>
 
@@ -29,5 +39,10 @@
 		<h2>Code</h2>
 		<pre id="result"></pre>
 	</div>
+
+	<footer>
+		<p>Copyright &copy; <a href="http://konrad.strack.pl">Konrad Strack</a> 2015.</p>
+		<p><a href="https://github.com/konradstrack/mcr-notices-builder">This web app</a> is available under the terms of the MIT license.</p>
+	</footer>
 </body>
 </html>
