@@ -2,9 +2,32 @@
 
 <html>
 <head>
+	<title>MCR notices builder</title>
+	<script src='assets/js/application.js'></script>
+	<link rel='stylesheet' href='assets/css/application.css' type='text/css' />
 </head>
 
 <body>
-	test
+	<h1>MCR notices builder</h1>
+	<div id="left">
+		<h2>Notices</h2>
+		<div id="notices">
+			<article contenteditable="true" class="notice" onkeyup="generate()"></article>
+		</div>
+
+		<button name="clean-up" onclick="cleanUp()">Clean up</button>
+		<button name="addNotice" onclick="addNotice()">Add notice</button>
+		<button name="generate" onclick="generate()">Generate</button>
+	</div>
+
+	<div id="right">
+		<h2>Preview</h2>
+		<div id="preview"></div>
+	</div>
+
+	<div id="bottom">
+		<h2>Code</h2>
+		<pre id="result"></pre>
+	</div>
 </body>
 </html>

@@ -1,0 +1,33 @@
+body {
+	font-family: sans-serif;
+}
+
+.notice {
+    min-height: 4em;
+    border: 1px solid gray;
+    border-radius: 2px;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+#left, #right {
+	width: 48%;
+	padding: 1%;
+}
+
+#left {
+	float: left;
+}
+
+#right {
+	float: right;
+}
+
+#bottom {
+	clear: both;
+	padding: 1%;
+}
+
+pre {
+	white-space: pre-wrap;
+}
