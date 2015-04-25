@@ -44,7 +44,7 @@ function addNotice(htmlValue) {
 		generate();
 	};
 
-	if (typeof(htmlValue) === 'undefined') a = '';
+	if (typeof(htmlValue) === 'undefined') htmlValue = '';
 	notice.innerHTML = htmlValue;
     
     notices.appendChild(notice);

@@ -9,7 +9,9 @@
 
 	<script>
 		window.onload = function() {
-			document.getElementById('addNotice').onclick = addNotice;
+			document.getElementById('addNotice').onclick = function() {
+				addNotice();
+			}
 			document.getElementById('cleanUp').onclick = function() {
 				cleanUp();
 				saveNotices();
