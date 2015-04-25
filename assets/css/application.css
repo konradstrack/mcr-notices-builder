@@ -65,7 +65,7 @@ h1 {
 
 footer {
 	padding: 1%;
-	font-size: 0.7em;
+	font-size: 0.8em;
 	color: #bbb;
 	text-align: right;
 }
@@ -78,3 +78,10 @@ a:hover {
 	color: #ccc;
 }
 
+#notices a, #preview a {
+	color: #458fa9;
+}
+
+#notices a:hover, #preview a:hover {
+	color: #6aaac2;
+}
