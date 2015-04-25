@@ -24,6 +24,7 @@ function fixNodeStyle(node) {
     // clean up
     if (node.nodeName.toLowerCase() == 'font') {
         node.removeAttribute("face");
+        node.removeAttribute("size");
     }
     
     var classes = ['span', 'p', 'div', 'code', 'pre', 'a'];
