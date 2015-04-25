@@ -6,9 +6,19 @@ body {
 .notice {
     min-height: 4em;
     padding: 1em;
-    margin-bottom: 1em;
+    margin-bottom: 1.4em;
 	background-color: white;
 	box-shadow: 0 0 8px black;
+}
+
+.notice-title {
+	padding: 0.3em 1em;
+	font-size: 1em;
+	background-color: white;
+	margin: 0 0 0.4em 0;
+	box-shadow: 0 0 8px black;
+	width: 100%;
+	border: 0;
 }
 
 #left, #right {
