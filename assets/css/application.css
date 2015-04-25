@@ -54,6 +54,11 @@ pre {
 	box-shadow: 0 0 8px black;
 }
 
+#result {
+	max-height: 500px;
+	overflow-y: auto;
+}
+
 h1, h2 {
 	color: white;
 	font-family: 'Raleway', 'Open Sans', sans-serif;
