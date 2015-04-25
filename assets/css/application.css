@@ -1,6 +1,6 @@
 body {
 	font-family: 'Open Sans', sans-serif;
-	background-color: #3f475b;
+	background-color: #1C2C52;
 }
 
 .notice {
@@ -29,6 +29,11 @@ body {
 	padding: 1%;
 }
 
+#buttons {
+	padding: 0 1%;
+	text-align: right;
+}
+
 pre {
 	white-space: pre-wrap;
 }
@@ -41,6 +46,7 @@ pre {
 
 h1, h2 {
 	color: white;
+	font-family: 'Raleway', 'Open Sans', sans-serif;
 }
 
 h1 {

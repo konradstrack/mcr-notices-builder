@@ -33,21 +33,28 @@ function fixNodeStyle(node) {
     }
 }
 
-function addNotice() {
+function addNotice(htmlValue) {
     var notices = document.getElementById("notices");
     
     var notice = document.createElement("article");
     notice.contentEditable = "true";
     notice.className = "notice";
-	notice.onkeyup = generate;
+	notice.onkeyup = function() {
+		saveNotices();
+		generate();
+	};
+
+	if (typeof(htmlValue) === 'undefined') a = '';
+	notice.innerHTML = htmlValue;
     
     notices.appendChild(notice);
+	return notice;
 }
 
 function generate() {
     var resultElement = document.getElementById("result");
     var previewElement = document.getElementById("preview");
-    var notices = document.getElementsByClassName("notice");
+    var notices = JSON.parse(localStorage.getItem('notices'));;
     
     previewElement.innerHTML = '';
     
@@ -55,32 +62,64 @@ function generate() {
 	table.style.width = '100%';
     previewElement.appendChild(table);
     
-    var index = 1;
-    Array.prototype.forEach.call(notices, function(notice) {
-        var tr = document.createElement("tr");
-        
-        var tdIndex = document.createElement("td");
-        tdIndex.style.paddingRight = '20pt';
-        tdIndex.style.borderTop = '1px solid #777777';
-        tdIndex.style.verticalAlign = 'top';
-        tdIndex.style.fontSize = '20pt';
-        tdIndex.style.color = '#444444';
-        tdIndex.style.fontWeight = 'bold';
-		tdIndex.style.width = '40pt';
-        
-        tdIndex.textContent = index;
-        ++index;
-        
-        var tdContent = document.createElement("td");
-        tdContent.style.paddingBottom = '20pt';
-        tdContent.style.borderTop = '1px solid #777777';
-        tdContent.innerHTML = notice.innerHTML;
-        
-        tr.appendChild(tdIndex);
-        tr.appendChild(tdContent);
-        
-        table.appendChild(tr);
-    });
+	if (notices !== null) {
+    	var index = 1;
+		Array.prototype.forEach.call(notices, function(notice) {
+			var tr = document.createElement("tr");
+			
+			var tdIndex = document.createElement("td");
+			tdIndex.style.paddingRight = '20pt';
+			tdIndex.style.borderTop = '1px solid #777777';
+			tdIndex.style.verticalAlign = 'top';
+			tdIndex.style.fontSize = '20pt';
+			tdIndex.style.color = '#444444';
+			tdIndex.style.fontWeight = 'bold';
+			tdIndex.style.width = '40pt';
+			
+			tdIndex.textContent = index;
+			++index;
+			
+			var tdContent = document.createElement("td");
+			tdContent.style.paddingBottom = '20pt';
+			tdContent.style.borderTop = '1px solid #777777';
+			tdContent.innerHTML = notice;
+			
+			tr.appendChild(tdIndex);
+			tr.appendChild(tdContent);
+			
+			table.appendChild(tr);
+		});
+	}
     
     resultElement.textContent = previewElement.innerHTML;
 }
+
+function readNotices() {
+	var noticesContainer = document.getElementById('notices');
+	noticesContainer.innerHTML = '';
+
+	var storedNotices = JSON.parse(localStorage.getItem('notices'));
+	if (storedNotices !== null) {
+		console.log(storedNotices);
+
+		Array.prototype.forEach.call(storedNotices, function(notice) {
+			addNotice(notice);
+		});
+	}
+}
+
+function saveNotices() {
+	var notices = document.getElementsByClassName('notice');
+	var noticesToStore = [];
+
+    Array.prototype.forEach.call(notices, function(notice) {
+		noticesToStore.push(notice.innerHTML);
+	});
+
+	localStorage.setItem('notices', JSON.stringify(noticesToStore));
+}
+
+function clearNotices() {
+	localStorage.removeItem('notices');
+}
+

@@ -4,37 +4,52 @@
 <head>
 	<title>MCR notices builder</title>
 	<script src='assets/js/application.js'></script>
-	<link rel='stylesheet' href='assets/css/application.css' type='text/css' />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel='stylesheet' href='assets/css/application.css'>
+
 	<script>
 		window.onload = function() {
 			document.getElementById('addNotice').onclick = addNotice;
 			document.getElementById('cleanUp').onclick = function() {
 				cleanUp();
+				saveNotices();
 				generate();
-			}
+			};
 			document.getElementById('generate').onclick = generate;
+			document.getElementById('clearNotices').onclick = function() {
+				if (window.confirm('Do you really want to remove all notices?')) {
+					clearNotices();
+					readNotices();
+					generate();
+				}
+			};
 
+			readNotices();
 			generate();
-		}
+		};
 	</script>
 
 	<link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
 </head>
 
 <body>
 	<h1>MCR notices builder</h1>
+
+	<nav id="buttons">
+		<button name="cleanUp" id="cleanUp" class="btn btn-primary">Clean up formatting</button>
+		<button name="generate" id="generate" class="btn btn-primary">Generate</button>
+		<button name="clearNotices" id="clearNotices" class="btn btn-danger">Clear notices</button>
+	</nav>
+
 	<div id="left">
 		<h2>Notices</h2>
 		<div id="notices">
-			<article contenteditable="true" class="notice" onkeyup="generate()">
-				Add your notices here.
-			</article>
 		</div>
 
-		<button name="addNotice" id="addNotice">Add notice</button>
-		<button name="cleanUp" id="cleanUp">Clean up formatting</button>
-		<button name="generate" id="generate">Generate</button>
+		<button name="addNotice" id="addNotice" class="btn btn-primary">Add notice</button>
 	</div>
 
 	<div id="right">
