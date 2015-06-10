@@ -21,16 +21,16 @@ body {
 	border: 0;
 }
 
-#left, #right {
+#notices, #preview {
 	width: 48%;
 	padding: 1%;
 }
 
-#left {
+#notices {
 	float: left;
 }
 
-#right {
+#preview {
 	float: right;
 }
 
@@ -48,7 +48,7 @@ pre {
 	white-space: pre-wrap;
 }
 
-#result, #preview {
+#result, #preview-content {
 	background-color: white;
 	padding: 1.5em;
 	box-shadow: 0 0 8px black;

@@ -1,56 +1,154 @@
-function cleanUp() {
-    var notices = document.getElementsByClassName("notice");
-    
-    Array.prototype.forEach.call(notices, function(notice) {     
-        cleanChildNodes(notice);
-    });
+(function() {
+	var app = angular.module('noticeListBuilder', []);
 
-    var titles = document.getElementsByClassName("notice-title");
-    
-    Array.prototype.forEach.call(titles, function(title) {     
-        cleanChildNodes(title);
-    });
+	app.controller('NoticeListController', ['$scope', '$sce', 'noticeListService', 'previewService',
+		function($scope, $sce, noticeListService, previewService) {
+			$scope.notices = noticeListService.notices;
+			$scope.previewHTML = previewService.updatePreview($scope.notices);
+
+			$scope.addNotice = function() {
+				noticeListService.addNotice();
+			};
+
+			$scope.updatePreview = function() {
+				$scope.previewHTML = previewService.updatePreview($scope.notices);
+			};
+		}
+	]);
+
+	app.factory('noticeListService', function() {
+		var notices = [{
+			title: "First.",
+			body: "Some text."
+		}, {
+			title: "Second.",
+			body: "More text."
+		}];
+
+		var addNotice = function() {
+			notices.push({
+				title: "More.",
+				body: "Even more."
+			});
+		};
+
+		return {
+			notices: notices,
+			addNotice: addNotice
+		};
+	});
+
+	app.factory('previewService', ['$sce',
+		function($sce) {
+
+			var updatePreview = function(notices) {
+				var preview = document.createElement('div');
+				preview.innerHTML = '';
+
+				var index = 1;
+				Array.prototype.forEach.call(notices, function(notice) {
+					var span = document.createElement('span');
+					span.innerHTML = index + '. ' + notice.title;
+					++index;
+
+					preview.appendChild(span);
+					preview.appendChild(document.createElement('br'));
+				});
+
+				return $sce.trustAsHtml(preview.innerHTML);
+			}
+
+			return {
+				updatePreview: updatePreview
+			}
+		}
+	]);
+
+	app.directive('noticeEditor', function() {
+		return {
+			templateUrl: 'assets/templates/noticeEditor.html'
+		}
+	});
+
+	// based directly on https://fdietz.github.io/recipes-with-angular-js
+	app.directive("contenteditable", function() {
+		return {
+			restrict: "A",
+			require: "ngModel",
+			link: function(scope, element, attrs, ngModel) {
+
+				function read() {
+					ngModel.$setViewValue(element.html());
+				}
+
+				ngModel.$render = function() {
+					element.html(ngModel.$viewValue || "");
+				};
+
+				element.bind("blur keyup change", function() {
+					scope.$apply(read);
+				});
+			}
+		};
+	});
+})();
+
+
+/*******/
+
+function cleanUp() {
+	var notices = document.getElementsByClassName("notice");
+
+	Array.prototype.forEach.call(notices, function(notice) {
+		cleanChildNodes(notice);
+	});
+
+	var titles = document.getElementsByClassName("notice-title");
+
+	Array.prototype.forEach.call(titles, function(title) {
+		cleanChildNodes(title);
+	});
 }
 
 function cleanChildNodes(element) {
-    var nodes = element.childNodes;
-    for(var i = 0; i < nodes.length; ++i) {
-        fixNodeStyle(nodes[i]);
-        cleanChildNodes(nodes[i]);
-    }
+	var nodes = element.childNodes;
+	for (var i = 0; i < nodes.length; ++i) {
+		fixNodeStyle(nodes[i]);
+		cleanChildNodes(nodes[i]);
+	}
 }
-    
-function fixNodeStyle(node) {  
-    // clean up
-    if (node.nodeName.toLowerCase() == 'font') {
-        node.removeAttribute("face");
-        node.removeAttribute("size");
-    }
-    
-    var classes = ['span', 'p', 'div', 'code', 'pre', 'a', 'font'];
-    
-    if (classes.indexOf(node.nodeName.toLowerCase()) > -1) {
-        node.style.fontSize = '';
-        node.style.fontFamily = '';
+
+function fixNodeStyle(node) {
+	// clean up
+	if (node.nodeName.toLowerCase() == 'font') {
+		node.removeAttribute("face");
+		node.removeAttribute("size");
+	}
+
+	var classes = ['span', 'p', 'div', 'code', 'pre', 'a', 'font'];
+
+	if (classes.indexOf(node.nodeName.toLowerCase()) > -1) {
+		node.style.fontSize = '';
+		node.style.fontFamily = '';
 		node.style.lineHeight = '';
-    }
-    
-    if (node.nodeName.toLowerCase() == 'p') {
-        node.style.paddingBottom = '5pt';
-    }
+	}
+
+	if (node.nodeName.toLowerCase() == 'p') {
+		node.style.paddingBottom = '5pt';
+	}
 }
 
 function addNotice(titleHtml, noticeHtml) {
 	if (typeof(noticeHtml) === 'undefined') noticeHtml = '';
 	if (typeof(titleHtml) === 'undefined') titleHtml = '';
 
-    var notices = document.getElementById("notices");
-    
-    var notice = document.createElement("article");
-    notice.contentEditable = "true";
-    notice.className = "notice";
+	var notices = document.getElementById("notices");
 
-    var title = document.createElement("p");
+	var notice = document.createElement("article");
+	notice.contentEditable = "true";
+	notice.className = "notice";
+
+	var title = document.createElement("p");
 	title.contentEditable = "true";
 	title.className = "notice-title";
 
@@ -64,19 +162,19 @@ function addNotice(titleHtml, noticeHtml) {
 
 	notice.innerHTML = noticeHtml;
 	title.innerHTML = titleHtml;
-   
-   	notices.appendChild(title);	
-    notices.appendChild(notice);
+
+	notices.appendChild(title);
+	notices.appendChild(notice);
 	return notice;
 }
 
 function generate() {
-    var resultElement = document.getElementById("result");
-    var previewElement = document.getElementById("preview");
-    var notices = JSON.parse(localStorage.getItem('notices'));
+	var resultElement = document.getElementById("result");
+	var previewElement = document.getElementById("preview");
+	var notices = JSON.parse(localStorage.getItem('notices'));
 	var titles = JSON.parse(localStorage.getItem('titles'));
-    
-    previewElement.innerHTML = '';
+
+	previewElement.innerHTML = '';
 
 	if (titles !== null) {
 		var index = 1;
@@ -91,16 +189,16 @@ function generate() {
 
 		previewElement.appendChild(document.createElement('br'));
 	}
-    
-    var table = document.createElement("table");
+
+	var table = document.createElement("table");
 	table.style.width = '100%';
-    previewElement.appendChild(table);
-    
+	previewElement.appendChild(table);
+
 	if (notices !== null) {
-    	var index = 1;
+		var index = 1;
 		Array.prototype.forEach.call(notices, function(notice) {
 			var tr = document.createElement("tr");
-			
+
 			var tdIndex = document.createElement("td");
 			tdIndex.style.paddingRight = '20pt';
 			tdIndex.style.borderTop = '1px solid #777777';
@@ -109,23 +207,23 @@ function generate() {
 			tdIndex.style.color = '#444444';
 			tdIndex.style.fontWeight = 'bold';
 			tdIndex.style.width = '40pt';
-			
+
 			tdIndex.textContent = index;
 			++index;
-			
+
 			var tdContent = document.createElement("td");
 			tdContent.style.paddingBottom = '20pt';
 			tdContent.style.borderTop = '1px solid #777777';
 			tdContent.innerHTML = notice;
-			
+
 			tr.appendChild(tdIndex);
 			tr.appendChild(tdContent);
-			
+
 			table.appendChild(tr);
 		});
 	}
-    
-    resultElement.textContent = previewElement.innerHTML;
+
+	resultElement.textContent = previewElement.innerHTML;
 }
 
 function readNotices() {
@@ -150,7 +248,7 @@ function saveNotices() {
 	var notices = document.getElementsByClassName('notice');
 	var noticesToStore = [];
 
-    Array.prototype.forEach.call(notices, function(notice) {
+	Array.prototype.forEach.call(notices, function(notice) {
 		noticesToStore.push(notice.innerHTML);
 	});
 
@@ -158,7 +256,7 @@ function saveNotices() {
 	var titles = document.getElementsByClassName('notice-title');
 	var titlesToStore = [];
 
-    Array.prototype.forEach.call(titles, function(title) {
+	Array.prototype.forEach.call(titles, function(title) {
 		titlesToStore.push(title.innerHTML);
 	});
 
@@ -170,4 +268,3 @@ function clearNotices() {
 	localStorage.removeItem('notices');
 	localStorage.removeItem('titles');
 }
-
