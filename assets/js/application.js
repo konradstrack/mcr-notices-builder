@@ -17,18 +17,12 @@
 	]);
 
 	app.factory('noticeListService', function() {
-		var notices = [{
-			title: "First.",
-			body: "Some text."
-		}, {
-			title: "Second.",
-			body: "More text."
-		}];
+		var notices = [];
 
 		var addNotice = function() {
 			notices.push({
-				title: "More.",
-				body: "Even more."
+				title: "",
+				body: ""
 			});
 		};
 
