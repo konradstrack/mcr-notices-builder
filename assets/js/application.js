@@ -1,17 +1,12 @@
 (function() {
 	var app = angular.module('noticeListBuilder', []);
 
-	app.controller('NoticeListController', ['$scope', '$sce', 'noticeListService', 'previewService',
+	app.controller('NoticeListController', ['$scope', '$sce', 'noticeListService',
 		function($scope, $sce, noticeListService, previewService) {
 			$scope.notices = noticeListService.notices;
-			$scope.previewHTML = previewService.updatePreview($scope.notices);
 
 			$scope.addNotice = function() {
 				noticeListService.addNotice();
-			};
-
-			$scope.updatePreview = function() {
-				$scope.previewHTML = previewService.updatePreview($scope.notices);
 			};
 		}
 	]);
@@ -31,32 +26,6 @@
 			addNotice: addNotice
 		};
 	});
-
-	app.factory('previewService', ['$sce',
-		function($sce) {
-
-			var updatePreview = function(notices) {
-				var preview = document.createElement('div');
-				preview.innerHTML = '';
-
-				var index = 1;
-				Array.prototype.forEach.call(notices, function(notice) {
-					var span = document.createElement('span');
-					span.innerHTML = index + '. ' + notice.title;
-					++index;
-
-					preview.appendChild(span);
-					preview.appendChild(document.createElement('br'));
-				});
-
-				return $sce.trustAsHtml(preview.innerHTML);
-			}
-
-			return {
-				updatePreview: updatePreview
-			}
-		}
-	]);
 
 	app.directive('noticeEditor', function() {
 		return {
