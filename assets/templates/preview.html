@@ -1,0 +1,9 @@
+<div ng-repeat="notice in notices">
+	<span>{{ $index + 1 }}. <span ng-bind-html="notice.title"></span></span>
+</div>
+
+---
+
+<div ng-repeat="notice in notices">
+	<p ng-bind-html="notice.body"></p>
+</div>

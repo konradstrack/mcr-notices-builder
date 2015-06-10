@@ -64,15 +64,21 @@
 		}
 	});
 
+	app.directive('preview', function() {
+		return {
+			templateUrl: 'assets/templates/preview.html'
+		}
+	});
+
 	// based directly on https://fdietz.github.io/recipes-with-angular-js
-	app.directive("contenteditable", function() {
+	app.directive("contenteditable", ['$sce', function($sce) {
 		return {
 			restrict: "A",
 			require: "ngModel",
 			link: function(scope, element, attrs, ngModel) {
 
 				function read() {
-					ngModel.$setViewValue(element.html());
+					ngModel.$setViewValue($sce.trustAsHtml(element.html()));
 				}
 
 				ngModel.$render = function() {
@@ -84,7 +90,7 @@
 				});
 			}
 		};
-	});
+	}]);
 })();
 
 
@@ -130,36 +136,6 @@ function fixNodeStyle(node) {
 	if (node.nodeName.toLowerCase() == 'p') {
 		node.style.paddingBottom = '5pt';
 	}
-}
-
-function addNotice(titleHtml, noticeHtml) {
-	if (typeof(noticeHtml) === 'undefined') noticeHtml = '';
-	if (typeof(titleHtml) === 'undefined') titleHtml = '';
-
-	var notices = document.getElementById("notices");
-
-	var notice = document.createElement("article");
-	notice.contentEditable = "true";
-	notice.className = "notice";
-
-	var title = document.createElement("p");
-	title.contentEditable = "true";
-	title.className = "notice-title";
-
-	var updateFunction = function() {
-		saveNotices();
-		generate();
-	};
-
-	notice.onkeyup = updateFunction;
-	title.onkeyup = updateFunction;
-
-	notice.innerHTML = noticeHtml;
-	title.innerHTML = titleHtml;
-
-	notices.appendChild(title);
-	notices.appendChild(notice);
-	return notice;
 }
 
 function generate() {
