@@ -9,22 +9,15 @@
 				noticeListService.addNotice();
 			};
 
-			$scope.saveNotices = function() {
-				Array.prototype.forEach.call($scope.notices, function(notice) {
-					console.log("here", notice.title);
-				});
+			$scope.$watch('notices', function(oldVal, newVal) {
 				noticeListService.saveNotices();
-			};
+			}, true);
 		}
 	]);
 
 	app.factory('noticeListService', ['$window',
 		function($window) {
 			var notices = $window.JSON.parse($window.localStorage.getItem('notices')) || [];
-
-			var saveNotices = function() {
-				$window.localStorage.setItem('notices', $window.JSON.stringify(notices));
-			};
 
 			return {
 				notices: notices,
@@ -36,7 +29,9 @@
 					});
 				},
 
-				saveNotices: saveNotices
+				saveNotices: function() {
+					$window.localStorage.setItem('notices', $window.JSON.stringify(notices));
+				}
 			};
 		}
 	]);
