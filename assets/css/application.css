@@ -23,7 +23,7 @@ body {
 
 #notices, #preview {
 	width: 48%;
-	padding: 1%;
+	padding: 0 1% 1% 1%;
 }
 
 #notices {
@@ -42,6 +42,17 @@ body {
 #buttons {
 	padding: 0 1%;
 	text-align: right;
+}
+
+#settings {
+	margin-top: 1em;
+	padding: 0 1%;
+	text-align: right;
+	color: white;
+}
+
+#settings input[type='checkbox'] {
+	margin: 0.5em;
 }
 
 pre {

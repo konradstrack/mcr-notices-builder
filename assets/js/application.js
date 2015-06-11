@@ -5,6 +5,10 @@
 		function($scope, noticeListService, previewService) {
 			$scope.notices = noticeListService.notices;
 
+			$scope.settingsModel = {
+				cleanUpFormatting: true
+			};
+
 			$scope.addNotice = function() {
 				noticeListService.addNotice();
 			};
@@ -94,52 +98,54 @@
 			};
 		}
 	]);
+
+	app.filter('cleanUpFormatting', ['$sce',
+		function($sce) {
+			return function(val, settings) {
+				var cleanUp = function(element) {
+					var nodes = element.childNodes;
+					for (var i = 0; i < nodes.length; ++i) {
+						fixNodeStyle(nodes[i]);
+						cleanUp(nodes[i]);
+					}
+
+					return element;
+				};
+
+				var fixNodeStyle = function(node) {
+					// clean up
+					if (node.nodeName.toLowerCase() == 'font') {
+						node.removeAttribute("face");
+						node.removeAttribute("size");
+					}
+
+					var classes = ['span', 'p', 'div', 'code', 'pre', 'a', 'font', 'h1', 'h2', 'h3'];
+
+					if (classes.indexOf(node.nodeName.toLowerCase()) > -1) {
+						node.style.fontSize = '';
+						node.style.fontFamily = '';
+						node.style.lineHeight = '';
+					}
+
+					if (node.nodeName.toLowerCase() == 'p') {
+						node.style.paddingBottom = '5pt';
+					}
+				};
+
+				if (settings.cleanUpFormatting) {
+					var container = document.createElement('div');
+					container.innerHTML = val;
+					return cleanUp(container).innerHTML;
+				} else {
+					return val;
+				}
+			}
+		}
+	]);
 })();
 
 
 /*******/
-
-function cleanUp() {
-	var notices = document.getElementsByClassName("notice");
-
-	Array.prototype.forEach.call(notices, function(notice) {
-		cleanChildNodes(notice);
-	});
-
-	var titles = document.getElementsByClassName("notice-title");
-
-	Array.prototype.forEach.call(titles, function(title) {
-		cleanChildNodes(title);
-	});
-}
-
-function cleanChildNodes(element) {
-	var nodes = element.childNodes;
-	for (var i = 0; i < nodes.length; ++i) {
-		fixNodeStyle(nodes[i]);
-		cleanChildNodes(nodes[i]);
-	}
-}
-
-function fixNodeStyle(node) {
-	// clean up
-	if (node.nodeName.toLowerCase() == 'font') {
-		node.removeAttribute("face");
-		node.removeAttribute("size");
-	}
-
-	var classes = ['span', 'p', 'div', 'code', 'pre', 'a', 'font'];
-
-	if (classes.indexOf(node.nodeName.toLowerCase()) > -1) {
-		node.style.fontSize = '';
-		node.style.fontFamily = '';
-		node.style.lineHeight = '';
-	}
-
-	if (node.nodeName.toLowerCase() == 'p') {
-		node.style.paddingBottom = '5pt';
-	}
-}
 
 function clearNotices() {
 	localStorage.removeItem('notices');
