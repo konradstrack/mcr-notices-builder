@@ -17,8 +17,8 @@
 	<h1>MCR notices builder</h1>
 
 	<nav id="buttons">
-		<button class="btn btn-success" ng-click="selectPreview()">Select content</button>
-		<button class="btn btn-danger" ng-click="clearNotices()">Clear notices</button>
+		<button class="btn btn-success" ng-click="selectPreview()">Select content to copy</button>
+		<button class="btn btn-danger" ng-click="clearNotices()">Remove all notices</button>
 	</nav>
 	<nav id="settings">
 		<label><input type="checkbox" ng-model="settingsModel.cleanUpFormatting"/>Clean up formatting?</label>
@@ -36,11 +36,6 @@
 	<div id="preview">
 		<h2>Preview</h2>
 		<div id="preview-content" preview></div>
-	</div>
-
-	<div id="bottom">
-		<h2>Code</h2>
-		<pre id="result"></pre>
 	</div>
 
 	<footer>

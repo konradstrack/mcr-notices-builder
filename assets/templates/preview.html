@@ -6,12 +6,12 @@
 
 <br />
 
-<table>
-<tr ng-repeat="notice in notices">
-	<td style="padding-top: 5pt; border-top: 1px solid #777777; vertical-align: top;
-		font-size: 20pt; color: #444444; font-weight: bold; width: 40pt">{{ $index + 1 }}</td>
+<table style="width: 100%">
+	<tr ng-repeat="notice in notices">
+		<td style="padding-top: 5pt; border-top: 1px solid #777777; vertical-align: top;
+			font-size: 20pt; color: #444444; font-weight: bold; width: 40pt">{{ $index + 1 }}</td>
 
-	<td style="padding-top: 5pt; padding-bottom: 20pt; border-top: 1px solid #777777" 
-		ng-bind-html="notice.body | cleanUpFormatting:settingsModel | trustAsHtml"></td>
-</tr>
+		<td style="padding-top: 5pt; padding-bottom: 20pt; border-top: 1px solid #777777" 
+			ng-bind-html="notice.body | cleanUpFormatting:settingsModel | trustAsHtml"></td>
+	</tr>
 </table>

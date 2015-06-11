@@ -1,4 +1,8 @@
 <article>
-	<p class="notice-title" contenteditable ng-model="notice.title"></p>
-	<p class="notice-body" contenteditable ng-model="notice.body"></p>
+	<span class="notice-number">{{ $index + 1 }}</span>
+    <span class="notice-title" contenteditable ng-model="notice.title"></span>
+    <p class="notice-body" contenteditable ng-model="notice.body"></p>
+    <div class="notice-buttons">
+        <button class="btn btn-danger" ng-click="removeNotice($index)">Remove notice</button>
+    </div>
 </article>

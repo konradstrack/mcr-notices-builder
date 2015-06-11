@@ -1,8 +1,8 @@
 (function() {
 	var app = angular.module('noticeListBuilder', []);
 
-	app.controller('NoticeListController', ['$scope', 'noticeListService',
-		function($scope, noticeListService, previewService) {
+	app.controller('NoticeListController', ['$scope', '$window', 'noticeListService',
+		function($scope, $window, noticeListService, previewService) {
 			$scope.notices = noticeListService.notices;
 
 			$scope.settingsModel = {
@@ -14,7 +14,15 @@
 			};
 
 			$scope.clearNotices = function() {
-				noticeListService.clearNotices();
+				if ($window.confirm('Do you really want to remove all notices?')) {
+					noticeListService.clearNotices();
+				}
+			};
+
+			$scope.removeNotice = function(index) {
+				if ($window.confirm('Do you really want to remove this notice?')) {
+					noticeListService.removeNotice(index);
+				}
 			};
 
 			$scope.selectPreview = function() {
@@ -56,10 +64,12 @@
 					$window.localStorage.setItem('notices', $window.JSON.stringify(notices));
 				},
 
+				removeNotice: function(index) {
+					notices.splice(index, 1);
+				},
+
 				clearNotices: function() {
-					if ($window.confirm('Do you really want to remove all notices?')) {
-						notices.length = 0;
-					}
+					notices.length = 0;
 				}
 			};
 		}
@@ -153,3 +163,4 @@
 		}
 	]);
 })();
+
