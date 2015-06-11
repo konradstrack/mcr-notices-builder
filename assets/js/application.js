@@ -9,6 +9,21 @@
 				noticeListService.addNotice();
 			};
 
+			$scope.selectPreview = function() {
+				var previewContent = document.getElementById('preview-content');
+
+				if (window.getSelection) {
+					var range = document.createRange();
+					range.selectNodeContents(previewContent);
+					window.getSelection().removeAllRanges();
+					window.getSelection().addRange(range);
+				} else if (document.selection) {
+					var range = document.body.createTextRange();
+					range.moveToElementText(previewContent);
+					range.select();
+				}
+			};
+
 			$scope.$watch('notices', function(oldVal, newVal) {
 				noticeListService.saveNotices();
 			}, true);
