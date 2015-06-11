@@ -13,6 +13,10 @@
 				noticeListService.addNotice();
 			};
 
+			$scope.clearNotices = function() {
+				noticeListService.clearNotices();
+			};
+
 			$scope.selectPreview = function() {
 				var previewContent = document.getElementById('preview-content');
 
@@ -50,6 +54,12 @@
 
 				saveNotices: function() {
 					$window.localStorage.setItem('notices', $window.JSON.stringify(notices));
+				},
+
+				clearNotices: function() {
+					if ($window.confirm('Do you really want to remove all notices?')) {
+						notices.length = 0;
+					}
 				}
 			};
 		}
@@ -143,11 +153,3 @@
 		}
 	]);
 })();
-
-
-/*******/
-
-function clearNotices() {
-	localStorage.removeItem('notices');
-	localStorage.removeItem('titles');
-}
