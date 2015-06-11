@@ -1,31 +1,45 @@
 (function() {
 	var app = angular.module('noticeListBuilder', []);
 
-	app.controller('NoticeListController', ['$scope', '$sce', 'noticeListService',
-		function($scope, $sce, noticeListService, previewService) {
+	app.controller('NoticeListController', ['$scope', 'noticeListService',
+		function($scope, noticeListService, previewService) {
 			$scope.notices = noticeListService.notices;
 
 			$scope.addNotice = function() {
 				noticeListService.addNotice();
 			};
+
+			$scope.saveNotices = function() {
+				Array.prototype.forEach.call($scope.notices, function(notice) {
+					console.log("here", notice.title);
+				});
+				noticeListService.saveNotices();
+			};
 		}
 	]);
 
-	app.factory('noticeListService', function() {
-		var notices = [];
+	app.factory('noticeListService', ['$window',
+		function($window) {
+			var notices = $window.JSON.parse($window.localStorage.getItem('notices')) || [];
 
-		var addNotice = function() {
-			notices.push({
-				title: "",
-				body: ""
-			});
-		};
+			var saveNotices = function() {
+				$window.localStorage.setItem('notices', $window.JSON.stringify(notices));
+			};
 
-		return {
-			notices: notices,
-			addNotice: addNotice
-		};
-	});
+			return {
+				notices: notices,
+
+				addNotice: function() {
+					notices.push({
+						title: "",
+						body: ""
+					});
+				},
+
+				saveNotices: saveNotices
+			};
+		}
+	]);
 
 	app.directive('noticeEditor', function() {
 		return {
@@ -40,26 +54,36 @@
 	});
 
 	// based directly on https://fdietz.github.io/recipes-with-angular-js
-	app.directive("contenteditable", ['$sce', function($sce) {
-		return {
-			restrict: "A",
-			require: "ngModel",
-			link: function(scope, element, attrs, ngModel) {
+	app.directive("contenteditable", ['$sce',
+		function($sce) {
+			return {
+				restrict: "A",
+				require: "ngModel",
+				link: function(scope, element, attrs, ngModel) {
 
-				function read() {
-					ngModel.$setViewValue($sce.trustAsHtml(element.html()));
+					function read() {
+						ngModel.$setViewValue(element.html());
+					}
+
+					ngModel.$render = function() {
+						element.html(ngModel.$viewValue || "");
+					};
+
+					element.bind("blur keyup change", function() {
+						scope.$apply(read);
+					});
 				}
+			};
+		}
+	]);
 
-				ngModel.$render = function() {
-					element.html(ngModel.$viewValue || "");
-				};
-
-				element.bind("blur keyup change", function() {
-					scope.$apply(read);
-				});
-			}
-		};
-	}]);
+	app.filter('trustAsHtml', ['$sce',
+		function($sce) {
+			return function(val) {
+				return $sce.trustAsHtml(val);
+			};
+		}
+	]);
 })();
 
 
@@ -163,44 +187,6 @@ function generate() {
 	}
 
 	resultElement.textContent = previewElement.innerHTML;
-}
-
-function readNotices() {
-	var noticesContainer = document.getElementById('notices');
-	noticesContainer.innerHTML = '';
-
-	var storedNotices = JSON.parse(localStorage.getItem('notices'));
-	var storedTitles = JSON.parse(localStorage.getItem('titles'));
-	if (storedNotices !== null && storedTitles !== null) {
-		console.log(storedNotices);
-		console.log(storedTitles);
-
-		var numberOfNotices = storedNotices.length;
-
-		for (var i = 0; i < numberOfNotices; ++i) {
-			addNotice(storedTitles[i], storedNotices[i]);
-		}
-	}
-}
-
-function saveNotices() {
-	var notices = document.getElementsByClassName('notice');
-	var noticesToStore = [];
-
-	Array.prototype.forEach.call(notices, function(notice) {
-		noticesToStore.push(notice.innerHTML);
-	});
-
-
-	var titles = document.getElementsByClassName('notice-title');
-	var titlesToStore = [];
-
-	Array.prototype.forEach.call(titles, function(title) {
-		titlesToStore.push(title.innerHTML);
-	});
-
-	localStorage.setItem('notices', JSON.stringify(noticesToStore));
-	localStorage.setItem('titles', JSON.stringify(titlesToStore));
 }
 
 function clearNotices() {

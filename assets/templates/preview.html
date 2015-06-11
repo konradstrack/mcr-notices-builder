@@ -1,9 +1,9 @@
 <div ng-repeat="notice in notices">
-	<span>{{ $index + 1 }}. <span ng-bind-html="notice.title"></span></span>
+	<span>{{ $index + 1 }}. <span ng-bind-html="notice.title | trustAsHtml"></span></span>
 </div>
 
 ---
 
 <div ng-repeat="notice in notices">
-	<p ng-bind-html="notice.body"></p>
+	<p ng-bind-html="notice.body | trustAsHtml"></p>
 </div>
