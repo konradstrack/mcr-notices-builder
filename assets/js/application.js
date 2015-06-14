@@ -139,12 +139,19 @@
 						node.removeAttribute("size");
 					}
 
-					var classes = ['span', 'p', 'div', 'code', 'pre', 'a', 'font', 'h1', 'h2', 'h3'];
+					var classes = ['span', 'p', 'div', 'code', 'pre', 'a', 'font', 
+						'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7'];
 
 					if (classes.indexOf(node.nodeName.toLowerCase()) > -1) {
 						node.style.fontSize = '';
 						node.style.fontFamily = '';
 						node.style.lineHeight = '';
+					}
+
+					var headers = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7'];
+
+					if (headers.indexOf(node.nodeName.toLowerCase()) > -1) {
+						node.style.fontSize = '1em';
 					}
 
 					if (node.nodeName.toLowerCase() == 'p') {
